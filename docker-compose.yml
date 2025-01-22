@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: taskmanager
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+
+  postgres:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: taskmanager
+    ports:
+      - "5432:5432"
+
+  app:
+    build:
+      context: .
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/taskmanager
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+      - postgres
+
